@@ -32,22 +32,23 @@ version: 2.1
 #               exit 1
 #             fi
             
-# jobs:
-#   build-frontend:
-#     docker:
-#       - image: circleci/node:13.8.0
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys: [frontend-build]
-#       - run:
-#           name: Build front-end
-#           command: |
-#             # Your code here
-#             exit 1
-#       - save_cache:
-#           paths: [frontend/node_modules]
-#           key: frontend-build
+jobs:
+  build-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Build front-end
+          command: |
+            cd frontend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
 
 #   build-backend:
 #     docker:
@@ -261,12 +262,10 @@ version: 2.1
 #             then
 #               # your code here
 #             fi
-            
-
-# workflows:
-#   default:
-#     jobs:
-#       - build-frontend
+workflows:
+  default:
+    jobs:
+      - build-frontend
 #       - build-backend
 #       - test-frontend:
 #           requires: [build-frontend]
